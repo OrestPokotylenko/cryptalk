@@ -1,0 +1,2 @@
+# cryptalk
+Cryptalk is a secure, open-hardware communication device that allows private messaging over long distance using LoRa or Wi-Fi. It operates without cloud services and can work entirely offline. Messages are end-to-end encrypted and optionally routed through a self-hosted server.
