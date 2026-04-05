@@ -1,8 +1,9 @@
 idf_component_register(
   SRCS
     "app/main.cpp"
+    "core/crypto/crypto_service.cpp"
   INCLUDE_DIRS
     "."
     "../include"
-  REQUIRES esp_timer freertos driver
+  REQUIRES esp_timer freertos driver mbedtls
 )

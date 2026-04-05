@@ -1,2 +1,6 @@
 CompileFlags:
-    Remove: [-f*, -m*]
+  Add:
+    - "-Iinclude"
+  Remove:
+    - "-f*"
+    - "-m*"

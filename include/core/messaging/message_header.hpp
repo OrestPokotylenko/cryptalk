@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cstdint>
+#include <array>
 
 namespace cryptalk::messaging {
     struct MessageHeader {
@@ -9,9 +10,9 @@ namespace cryptalk::messaging {
         uint8_t flags;
         uint8_t reserved;
 
-        uint32_t message_id;
-        uint32_t sender_id;
-        uint32_t receiver_id;
-        uint32_t cyphertext_len;
+        uint64_t message_id;
+        std::array<uint8_t, 16> sender_id;
+        std::array<uint8_t, 16> receiver_id;
+        uint32_t ciphertext_len;
     };
 }

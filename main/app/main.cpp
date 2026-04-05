@@ -1,7 +1,6 @@
-#include "freertos/FreeRTOS.h"
-#include "freertos/task.h"
+#include <cstdio>
+#include <cstring>
 
 extern "C" void app_main(void)
 {
-    // your code here
 }
