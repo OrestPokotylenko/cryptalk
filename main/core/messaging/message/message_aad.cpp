@@ -1,4 +1,4 @@
-#include "core/messaging/message_aad.hpp"
+#include "core/messaging/message/message_aad.hpp"
 
 namespace cryptalk::messaging {
     static void append_u32_be(std::vector<uint8_t>& out, uint32_t value) {

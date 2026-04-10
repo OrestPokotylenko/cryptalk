@@ -6,11 +6,11 @@
 #include <vector>
 #include <string>
 
-#include "core/messaging/message_service.hpp"
+#include "core/messaging/message/message_factory.hpp"
 #include "core/crypto/crypto_service.hpp"
 
 using cryptalk::messaging::Message;
-using cryptalk::messaging::MessageService;
+using cryptalk::messaging::MessageFactory;
 using cryptalk::crypto::CryptoService;
 
 static const std::array<uint8_t, 32> MOCK_KEY = {
@@ -79,7 +79,7 @@ static int decrypt_message(
 }
 
 static Message generate_test_message(const uint8_t* plaintext, size_t plaintext_len) {
-    MessageService message_service;
+    MessageFactory message_service;
     Message msg{};
 
     std::array<uint8_t, 16> receiver_id = RECEIVER_ID;

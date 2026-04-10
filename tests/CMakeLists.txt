@@ -39,8 +39,8 @@ target_include_directories(cryptalk_persistence PUBLIC
 )
 
 add_library(cryptalk_message STATIC
-    ../main/core/messaging/message_service.cpp
-    ../main/core/messaging/message_aad.cpp
+    ../main/core/messaging/message/message_factory.cpp
+    ../main/core/messaging/message/message_aad.cpp
 )
 
 target_include_directories(cryptalk_message PUBLIC

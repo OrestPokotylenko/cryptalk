@@ -5,7 +5,7 @@
 #include <array>
 #include <cstdint>
 
-#include "core/messaging/message_aad.hpp"
+#include "core/messaging/message/message_aad.hpp"
 
 static void test_build_message_aad_layout() {
     std::array<uint8_t, 16> sender_id = {

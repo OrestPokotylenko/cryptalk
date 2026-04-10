@@ -6,7 +6,7 @@
 #include <cstdint>
 #include <cstring>
 
-#include "core/messaging/message_aad.hpp"
+#include "core/messaging/message/message_aad.hpp"
 #include "core/crypto/crypto_service.hpp"
 
 using cryptalk::crypto::CryptoService;

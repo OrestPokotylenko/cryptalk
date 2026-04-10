@@ -2,7 +2,7 @@
 
 #include <vector>
 #include <array>
-#include "../messaging/message_header.hpp"
+#include "message_header.hpp"
 
 namespace cryptalk::messaging {
     struct Message
