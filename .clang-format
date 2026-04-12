@@ -1,0 +1,40 @@
+BasedOnStyle: LLVM
+
+# --- Indentation ---
+IndentWidth: 4
+TabWidth: 4
+UseTab: Never
+
+# --- Namespaces ---
+NamespaceIndentation: None
+
+# --- Access modifiers (clean + predictable) ---
+AccessModifierOffset: -4
+IndentAccessModifiers: false
+
+# --- Line length ---
+ColumnLimit: 100
+
+# --- Pointers / references ---
+PointerAlignment: Left
+ReferenceAlignment: Left
+
+# --- Function parameters ---
+BinPackParameters: false
+BinPackArguments: false
+AlignAfterOpenBracket: Align
+AllowAllParametersOfDeclarationOnNextLine: false
+PenaltyBreakBeforeFirstCallParameter: 1000
+
+# --- Short constructs ---
+AllowShortFunctionsOnASingleLine: Empty
+AllowShortIfStatementsOnASingleLine: Never
+
+# --- Braces ---
+BreakBeforeBraces: Attach
+
+# --- Spacing ---
+SpaceBeforeParens: ControlStatements
+
+# --- Namespace comments ---
+FixNamespaceComments: false

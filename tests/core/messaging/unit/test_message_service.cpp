@@ -1,35 +1,49 @@
 // tests/core/messaging/unit/test_message_service.cpp
+#include <array>
 #include <cassert>
+#include <cstdint>
 #include <iostream>
 #include <vector>
-#include <array>
-#include <cstdint>
 
 #include "core/messaging/message/message_aad.hpp"
 
 static void test_build_message_aad_layout() {
-    std::array<uint8_t, 16> sender_id = {
-        0x01, 0x02, 0x03, 0x04,
-        0x05, 0x06, 0x07, 0x08,
-        0x09, 0x0A, 0x0B, 0x0C,
-        0x0D, 0x0E, 0x0F, 0x10
-    };
+    std::array<uint8_t, 16> sender_id = {0x01,
+                                         0x02,
+                                         0x03,
+                                         0x04,
+                                         0x05,
+                                         0x06,
+                                         0x07,
+                                         0x08,
+                                         0x09,
+                                         0x0A,
+                                         0x0B,
+                                         0x0C,
+                                         0x0D,
+                                         0x0E,
+                                         0x0F,
+                                         0x10};
 
-    std::array<uint8_t, 16> receiver_id = {
-        0xA1, 0xA2, 0xA3, 0xA4,
-        0xA5, 0xA6, 0xA7, 0xA8,
-        0xA9, 0xAA, 0xAB, 0xAC,
-        0xAD, 0xAE, 0xAF, 0xB0
-    };
+    std::array<uint8_t, 16> receiver_id = {0xA1,
+                                           0xA2,
+                                           0xA3,
+                                           0xA4,
+                                           0xA5,
+                                           0xA6,
+                                           0xA7,
+                                           0xA8,
+                                           0xA9,
+                                           0xAA,
+                                           0xAB,
+                                           0xAC,
+                                           0xAD,
+                                           0xAE,
+                                           0xAF,
+                                           0xB0};
 
-    std::vector<uint8_t> aad = cryptalk::messaging::build_message_aad(
-        1,
-        2,
-        3,
-        0x11223344,
-        sender_id,
-        receiver_id
-    );
+    std::vector<uint8_t> aad =
+        cryptalk::messaging::build_message_aad(1, 2, 3, 0x11223344, sender_id, receiver_id);
 
     assert(aad.size() == 39);
 

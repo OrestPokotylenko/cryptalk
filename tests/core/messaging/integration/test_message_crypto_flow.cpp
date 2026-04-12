@@ -1,37 +1,45 @@
+#include <array>
 #include <cassert>
 #include <cstring>
-#include <iostream>
 #include <iomanip>
-#include <array>
-#include <vector>
+#include <iostream>
 #include <string>
+#include <vector>
 
-#include "core/messaging/message/message_factory.hpp"
 #include "core/crypto/crypto_service.hpp"
+#include "core/messaging/message/message_factory.hpp"
 
+using cryptalk::crypto::CryptoService;
 using cryptalk::messaging::Message;
 using cryptalk::messaging::MessageFactory;
-using cryptalk::crypto::CryptoService;
 
-static const std::array<uint8_t, 32> MOCK_KEY = {
-    0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16, 0x17,
-    0x18, 0x19, 0x1A, 0x1B, 0x1C, 0x1D, 0x1E, 0x1F,
-    0x20, 0x21, 0x22, 0x23, 0x24, 0x25, 0x26, 0x27,
-    0x28, 0x29, 0x2A, 0x2B, 0x2C, 0x2D, 0x2E, 0x2F
-};
+static const std::array<uint8_t, 32> MOCK_KEY = {0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16, 0x17,
+                                                 0x18, 0x19, 0x1A, 0x1B, 0x1C, 0x1D, 0x1E, 0x1F,
+                                                 0x20, 0x21, 0x22, 0x23, 0x24, 0x25, 0x26, 0x27,
+                                                 0x28, 0x29, 0x2A, 0x2B, 0x2C, 0x2D, 0x2E, 0x2F};
 
-static const std::array<uint8_t, 16> RECEIVER_ID = {
-    0x11, 0x22, 0x33, 0x44,
-    0x55, 0x66, 0x77, 0x88,
-    0x99, 0xAA, 0xBB, 0xCC,
-    0xDD, 0xEE, 0xF0, 0x01
-};
+static const std::array<uint8_t, 16> RECEIVER_ID = {0x11,
+                                                    0x22,
+                                                    0x33,
+                                                    0x44,
+                                                    0x55,
+                                                    0x66,
+                                                    0x77,
+                                                    0x88,
+                                                    0x99,
+                                                    0xAA,
+                                                    0xBB,
+                                                    0xCC,
+                                                    0xDD,
+                                                    0xEE,
+                                                    0xF0,
+                                                    0x01};
 
 static void print_bytes(const char* label, const uint8_t* data, size_t len) {
     std::cout << label << " (" << len << " bytes): ";
     for (size_t i = 0; i < len; i++) {
-        std::cout << std::hex << std::setw(2) << std::setfill('0')
-                  << static_cast<int>(data[i]) << ' ';
+        std::cout << std::hex << std::setw(2) << std::setfill('0') << static_cast<int>(data[i])
+                  << ' ';
     }
     std::cout << std::dec << '\n';
 }
@@ -57,25 +65,21 @@ static std::vector<uint8_t> build_aad_from_message(const Message& msg) {
     return aad;
 }
 
-static int decrypt_message(
-    CryptoService& crypto_service,
-    const Message& msg,
-    const uint8_t* aad,
-    size_t aad_len,
-    std::vector<uint8_t>& decrypted_out
-) {
+static int decrypt_message(CryptoService& crypto_service,
+                           const Message& msg,
+                           const uint8_t* aad,
+                           size_t aad_len,
+                           std::vector<uint8_t>& decrypted_out) {
     decrypted_out.assign(msg.ciphertext.size(), 0);
 
-    return crypto_service.decrypt_text(
-        MOCK_KEY.data(),
-        msg.ciphertext.data(),
-        msg.ciphertext.size(),
-        msg.nonce.data(),
-        aad,
-        aad_len,
-        msg.tag.data(),
-        decrypted_out
-    );
+    return crypto_service.decrypt_text(MOCK_KEY.data(),
+                                       msg.ciphertext.data(),
+                                       msg.ciphertext.size(),
+                                       msg.nonce.data(),
+                                       aad,
+                                       aad_len,
+                                       msg.tag.data(),
+                                       decrypted_out);
 }
 
 static Message generate_test_message(const uint8_t* plaintext, size_t plaintext_len) {
@@ -84,14 +88,7 @@ static Message generate_test_message(const uint8_t* plaintext, size_t plaintext_
 
     std::array<uint8_t, 16> receiver_id = RECEIVER_ID;
 
-    int rc = message_service.generate_message(
-        plaintext,
-        plaintext_len,
-        2,
-        1,
-        receiver_id,
-        msg
-    );
+    int rc = message_service.generate_message(plaintext, plaintext_len, 2, 1, receiver_id, msg);
 
     assert(rc == 0);
     return msg;
@@ -130,19 +127,13 @@ static void test_create_and_decrypt_message_roundtrip() {
     std::vector<uint8_t> aad = build_aad_from_message(msg);
 
     std::vector<uint8_t> decrypted_out;
-    int rc = decrypt_message(
-        crypto_service,
-        msg,
-        aad.data(),
-        aad.size(),
-        decrypted_out
-    );
+    int rc = decrypt_message(crypto_service, msg, aad.data(), aad.size(), decrypted_out);
 
     std::cout << "decrypt_text rc = " << rc << "\n";
     assert(rc == 0);
 
-    std::cout << "Decrypted text: "
-              << std::string(decrypted_out.begin(), decrypted_out.end()) << "\n";
+    std::cout << "Decrypted text: " << std::string(decrypted_out.begin(), decrypted_out.end())
+              << "\n";
 
     assert(decrypted_out.size() == plaintext_len);
     assert(std::memcmp(decrypted_out.data(), plaintext, decrypted_out.size()) == 0);
@@ -164,13 +155,7 @@ static void test_tampered_ciphertext_should_fail() {
     print_bytes("Tampered Ciphertext", msg.ciphertext.data(), msg.ciphertext.size());
 
     std::vector<uint8_t> decrypted_out;
-    int rc = decrypt_message(
-        crypto_service,
-        msg,
-        aad.data(),
-        aad.size(),
-        decrypted_out
-    );
+    int rc = decrypt_message(crypto_service, msg, aad.data(), aad.size(), decrypted_out);
 
     std::cout << "decrypt_text rc = " << rc << "\n";
     assert(rc != 0);
@@ -192,13 +177,7 @@ static void test_wrong_tag_should_fail() {
     print_bytes("Tampered Tag", msg.tag.data(), msg.tag.size());
 
     std::vector<uint8_t> decrypted_out;
-    int rc = decrypt_message(
-        crypto_service,
-        msg,
-        aad.data(),
-        aad.size(),
-        decrypted_out
-    );
+    int rc = decrypt_message(crypto_service, msg, aad.data(), aad.size(), decrypted_out);
 
     std::cout << "decrypt_text rc = " << rc << "\n";
     assert(rc != 0);
@@ -219,13 +198,7 @@ static void test_wrong_aad_should_fail() {
     aad[0] ^= 0xFF; // corrupt version byte in AAD
 
     std::vector<uint8_t> decrypted_out;
-    int rc = decrypt_message(
-        crypto_service,
-        msg,
-        aad.data(),
-        aad.size(),
-        decrypted_out
-    );
+    int rc = decrypt_message(crypto_service, msg, aad.data(), aad.size(), decrypted_out);
 
     std::cout << "decrypt_text rc = " << rc << "\n";
     assert(rc != 0);
